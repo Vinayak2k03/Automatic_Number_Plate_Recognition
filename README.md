@@ -1,105 +1,165 @@
-# Automatic Number Plate Recognition
+# Automatic Number Plate Recognition with YOLO and OCR
 
-![dataset-cover](https://user-images.githubusercontent.com/57320216/166916670-03dfabe1-8c6c-471a-875c-8715354aa957.jpg)
+This project combines YOLO object detection with OCR technology to automatically detect and recognize license plates in images and video streams.
 
-**Automatic Number Plate Recognition (ANPR)** is the process of reading the characters on the plate with various optical character recognition (OCR) methods by separating the plate region on the vehicle image obtained from automatic plate recognition.
+## Table of Contents
+- [Features](#features)
+- [Installation Guide](#installation-guide)
+  - [Prerequisites](#prerequisites)
+  - [Python 3.9 Installation](#python-39-installation)
+  - [Project Setup](#project-setup)
+- [Usage](#usage)
+- [Configuration](#configuration)
+- [Troubleshooting](#troubleshooting)
+- [Contributing](#contributing)
+- [License](#license)
 
-## Table of Content
+## Features
 
-- [Automatic Number Plate Recognition](#automatic-number-plate-recognition)
+- Real-time license plate detection using YOLO object detection
+- Optical Character Recognition (OCR) for reading plate numbers
+- Support for both image and video processing
+- Web interface for easy access
+- CSV export of recognized plate numbers
+- Support for multiple plate formats
 
-  * [What will you learn this project ](#what-will-you-learn-this-project)
-  * [Dataset](#dataset)
-  * [Installation](#installation)
-  * [Usage](#usage)
-  * [Project architecture](#project-architecture)
-  * [Some Result](#some-result)
-  * [Source](#source)
-  * [Licence](#licence)
+## Installation Guide
 
+### Prerequisites
 
-## What will you learn this project 
+- Git
+- Python 3.9
+- Webcam (for real-time detection)
 
-* Custom Object Detection
-* Scene Text Detection
-* Scene Text Recognation
-* Optic Character Recognation
-* EasyOCR, PaddleOCR
-* Database,CSV format
-* Applying project in Real Time
-* Flask
-## Dataset
-The dataset I use for license plate detection:  
+### Python 3.9 Installation
 
-https://www.kaggle.com/datasets/andrewmvd/car-plate-detection
+#### Windows
+1. Download Python 3.9 from the [official Python website](https://www.python.org/downloads/release/python-3913/)
+2. Run the installer
+3. Check the box that says "Add Python 3.9 to PATH"
+4. Click "Install Now"
+5. Verify installation by opening Command Prompt and typing:
+    ```
+    python --version
+    ```
 
-## Installation
+#### macOS
+1. Install Homebrew if not already installed:
+    ```
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    ```
+2. Install Python 3.9 using Homebrew:
+    ```
+    brew install python@3.9
+    ```
+3. Verify installation:
+    ```
+    python3.9 --version
+    ```
 
-Clone repo and install requirements.txt in a Python>=3.7.0 environment.
+### Project Setup
 
-    git clone https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR.git  # clone
-    cd Automatic-number-plate-recognition-YOLO-OCR
-    pip install -r requirements.txt  # install
+#### 1. Clone the Repository
+```bash
+git clone https://github.com/Vinayak2k03/Automatic_Number_Plate_Recognition.git .
+```
+
+#### 2. Create and Activate Virtual Environment
+
+##### Windows
+```bash
+python -m venv venv
+venv\Scripts\activate
+```
+
+##### macOS/Linux
+```bash
+python3.9 -m venv venv
+source venv/bin/activate
+```
+
+#### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+Note: If you encounter issues with PyTorch installation, you might need to install it separately following instructions at [PyTorch.org](https://pytorch.org/get-started/locally/).
+
+#### 4. Run the Application
+
+```bash
+  python main.py
+```
+
+Then open your browser and navigate to http://127.0.0.1:5000/.
 
 ## Usage
 
-After the req libraries are installed, you can run the project by main.py.
+- Press **ESC** key to exit the camera window
+- For best results, ensure proper lighting conditions when capturing license plates
+- The recognized plate numbers are saved in `ocr_results.csv` file
 
-    python main.py
+### Web Interface Options
 
-## Project architecture
+The web interface provides several options:
+- Upload image for processing
+- View real-time camera feed
+- Access detection history
+- Configure detection parameters
 
-The pipeline in the project is as follows:  
+### Command Line Options
 
-![images](https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR/blob/main/imgs/flowchart.png)
+```bash
+python detect_plates.py --source 0  # Use webcam
+python detect_plates.py --source video.mp4  # Process a video file
+python detect_plates.py --source images/  # Process all images in a directory
+```
 
-- Custom object detection with plate extraction using yolov5
-- Apply the extracted plate to EasyOCR and PaddleOCR
-- Get plate text
-- Filter text
-- Write Database and CSV format
-- Upload to Flask  
+## Configuration
 
+You can modify the configuration in the `config.yaml` file:
 
-## Some Result
+```yaml
+model:
+  weights: 'weights/yolov5s.pt'
+  confidence_threshold: 0.25
+  
+ocr:
+  engine: 'tesseract'  # Options: tesseract, easyocr
+  language: 'eng'
+  
+output:
+  save_results: true
+  display_window: true
+```
 
-* As you can see, first step is detect the plate with using Yolov5. 
+## Troubleshooting
 
-![images](https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR/blob/main/imgs/realtime.png)
+- **GPU-related errors**: Try running the application in CPU mode
+  ```bash
+  python detect_plates.py --device cpu
+  ```
+  
+- **OCR-related issues**: Make sure all dependencies are correctly installed
+  ```bash
+  pip install pytesseract
+  pip install opencv-python-headless
+  ```
+  
+- **Model download failures**: Manually download the model files from the repository releases
 
-* After detect plate, apply the ocr. Paddle ocr Easy ocr for recognizing plate.  
+- **Camera not working**: Check if your camera is properly connected and not being used by another application
 
-![images](https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR/blob/main/imgs/plate_recog.jpg)
+## Contributing
 
-* Then write csv or database, when put it all in one.  
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-![images](https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR/blob/main/imgs/all.png)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-* The last step is Flask :) Actually, I didn't have time to integrate all the code in Flask. I just uploaded the yolov5 part. If you do, don't forget to pull request :)  
+## License
 
-![images](https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR/blob/main/imgs/flask_test.png)
-
-
-## Similar work
-A streamlit based implementation of Automatic Number Plate Recognition for cars and other vehicles using images or live camera feed.
-
-![Animation](https://user-images.githubusercontent.com/29462447/168389056-9f39b89d-1221-432b-878d-578d9114d466.gif)
-![live feed demo](https://user-images.githubusercontent.com/29462447/168389042-c06f3dd2-5047-4138-8c11-07372d63046a.gif)
-
-The entire code for the webapp can be found [here.](https://github.com/prateekralhan/Streamlit-based-Automatic-Number-Plate-Recognition)
-
-
-## Source  
-- https://docs.python.org/3/library/csv.html  
-- https://github.com/ultralytics/yolov5  
-- https://github.com/PaddlePaddle/PaddleOCR
-- https://medium.com/move-on-ai/yolov5-object-detection-with-your-own-dataset-6e3823a8f66b  
-- https://github.com/JaidedAI/EasyOCR  
--     https://www.researchgate.net/publication/319198085_License_Number_Plate_Recognition_System_using_Entropy_basedFeatures_Selection_Approach_with_SVM/figures?lo=1&utm_source=google&utm_medium=organic
-
-## Licence
-[MIT](https://github.com/mftnakrsu/Automatic-number-plate-recognition-YOLO-OCR/blob/main/LICENSE)
-
-## To Do 
-- [ ] use fcaykon pip yolo instead of hardcoded yolo files
-- [ ] hugging face
+This project is licensed under the terms specified in the LICENSE file.

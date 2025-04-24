@@ -1,5 +1,6 @@
 # It contains all the parameters that are used in the program.
 import torch
+import os
 
 
 class Parameters:
@@ -31,4 +32,5 @@ class Parameters:
         self.vis_shape = (800, 600)
         self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        self.model = "/home/mef/Documents/plate_detection_project/best.pt"
+        # Use os.path.join for cross-platform compatibility
+        self.model = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "model", "best.pt")
