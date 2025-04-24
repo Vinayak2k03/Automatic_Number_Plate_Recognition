@@ -91,8 +91,6 @@ Note: If you encounter issues with PyTorch installation, you might need to insta
   python main.py
 ```
 
-Then open your browser and navigate to http://127.0.0.1:5000/.
-
 ## Usage
 
 - Press **ESC** key to exit the camera window
